@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
+    //product yerine kategori yazıp devam edebiliriz yada generic class tanımlayıp kod tekrarından kaçınabiliriz
     public class EfCategoryDal : IProductDal
     {
         public void Add(Product entity)
