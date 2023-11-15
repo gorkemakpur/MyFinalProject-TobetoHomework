@@ -18,6 +18,7 @@ namespace ConsoleUI
             foreach (var item in pm.GetByUnitPrice(10,20))
             {
                 Console.WriteLine(item.ProductName);
+                Console.WriteLine(item.CategoryId);
             }
 
 
