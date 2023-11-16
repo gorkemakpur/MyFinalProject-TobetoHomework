@@ -13,6 +13,20 @@ namespace ConsoleUI
             //CategoryTest();
             //ProductTestV2();
             ProductManager productManager = new ProductManager(new EfProductDal());
+            var result = productManager.GetProductDetails();
+
+            if (!result.Success)
+            {
+                foreach (var item in result.Data)
+                {
+                    Console.WriteLine(item.ProductName + "//" + item.CategoryName);
+                }
+
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
             Product product = new Product
             {
                 CategoryId = 1,
@@ -27,9 +41,10 @@ namespace ConsoleUI
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
 
-            foreach (var item in productManager.GetProductDetails())
+            foreach (var item in productManager.GetProductDetails().Success.ToString())
             {
-                Console.WriteLine(item.ProductName + "//" + item.CategoryName);
+                Console.WriteLine(item);
+                //Console.WriteLine(item.ProductName + "//" + item.CategoryName);
             }
         }
 
@@ -53,7 +68,7 @@ namespace ConsoleUI
                  Console.WriteLine(item.ProductName);
              }
             */
-            foreach (var item in pm.GetByUnitPrice(10, 20))
+            foreach (var item in pm.GetByUnitPrice(10, 20).Data)
             {
                 Console.WriteLine(item.ProductName);
                 Console.WriteLine(item.CategoryId);
