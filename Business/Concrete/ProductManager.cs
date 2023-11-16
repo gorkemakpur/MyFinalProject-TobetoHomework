@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
+using Core.Utilities.Results.ResultType;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -19,15 +22,42 @@ namespace Business.Concrete
         {
             _productDal = productDal;
         }
-        public List<Product> GetAll()
+
+        public IResult Add(Product product)
+        {
+
+            //iş kuralı kontrol edilip hata verilirse error mesaj basılır
+            if (product.ProductName.Length<2)
+            {
+                //magic strings stringleri ayrı ayrı yazmak bi süre sonra değiştirmemiz gerekirse heryere ulaşmamız gerekir 
+                return new ErrorResult(Messages.ProductAdded);
+            }
+
+            //business code -> işlendiği varsayılıp ekleme işlemi yapılır
+            _productDal.Add(product);
+            //ardından ürünün eklendiğine dair bilgi,mesaj return edilir
+            return new SuccessResult("Ürün Eklendi");
+        }
+
+        IDataResult<List<Product>> GetAll()
         {
             //iş kodları
-            return _productDal.GetAll();    
+            //         data result döndürüyoruz ( bu datayı döndürüyoruz-işlem sonucu true-mesajımız bu)
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorDataResult();
+            }
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),true,"Ürünler Listelendi");    
         }
 
         public List<Product> GetAllByCategoryId(int categoryId)
         {
             return _productDal.GetAll(p=>p.CategoryId==categoryId);
+        }
+
+        public Product GetById(int productId)
+        {
+            return _productDal.Get(p=>p.ProductId==productId);
         }
 
         public List<Product> GetByUnitPrice(decimal min, decimal max)
