@@ -12,6 +12,35 @@ namespace ConsoleUI
             //ProductTest();
             //CategoryTest();
             //ProductTestV2();
+            //ProductTestV3();
+            //ProductAddedTest();
+        }
+
+        private static void ProductAddedTest()
+        {
+            ProductManager productManager = new ProductManager(new EfProductDal());
+            Product product = new Product
+            {
+                CategoryId = 1,
+                ProductName = "Test",
+                UnitPrice = 4444,
+                UnitsInStock = 22
+            };
+
+            var result = productManager.Add(product);
+
+            if (result.Success)
+            {
+                Console.WriteLine(result.Message);
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+        }
+
+        private static void ProductTestV3()
+        {
             ProductManager productManager = new ProductManager(new EfProductDal());
             var result = productManager.GetProductDetails();
 
@@ -34,7 +63,6 @@ namespace ConsoleUI
                 UnitPrice = 1234,
                 UnitsInStock = 22
             };
-                
         }
 
         private static void ProductTestV2()

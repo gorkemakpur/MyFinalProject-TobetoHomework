@@ -16,11 +16,11 @@ namespace Core.Utilities.Results
             Data = data;
         }
         //mesaj göndermek istemezsek bu şekilde kullanılır
-        //
         public DataResult(T data, bool success) : base(success)
         {
             Data=data;
         }
+
         public T Data { get; }
     }
 }
