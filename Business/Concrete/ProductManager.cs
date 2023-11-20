@@ -41,7 +41,7 @@ namespace Business.Concrete
         {
             //iş kodları
             //data result döndürüyoruz ( bu datayı döndürüyoruz-işlem sonucu true-mesajımız bu)
-            if (DateTime.Now.Hour == 17)
+            if (DateTime.Now.Hour == 16)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
