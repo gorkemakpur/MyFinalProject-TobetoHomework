@@ -1,13 +1,18 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using Core.Utilities.Results.ResultType;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,18 +28,25 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            //iş kuralı kontrol edilip hata verilirse error mesaj basılır
-            if (product.ProductName.Length < 2)
-            {
-                //magic strings stringleri ayrı ayrı yazmak bi süre sonra değiştirmemiz gerekirse heryere ulaşmamız gerekir 
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
-            //business code -> işlendiği varsayılıp ekleme işlemi yapılır
+
             _productDal.Add(product);
-            //ardından ürünün eklendiğine dair bilgi,mesaj return edilir
             return new SuccessResult(Messages.ProductAdded);
+
+            //---------------------eski yorum satırlarıyla kodlar--------------------------------
+            //ValidationTool.Validate(new ProductValidator(), product);//aspect ekledik
+            ////////iş kuralı kontrol edilip hata verilirse error mesaj basılır
+            //////if (product.ProductName.Length < 2)
+            //////{
+            //////    //magic strings stringleri ayrı ayrı yazmak bi süre sonra değiştirmemiz gerekirse heryere ulaşmamız gerekir 
+            //////    return new ErrorResult(Messages.ProductNameInvalid);
+            //////}
+            ////////business code -> işlendiği varsayılıp ekleme işlemi yapılır
+            //////_productDal.Add(product);
+            ////////ardından ürünün eklendiğine dair bilgi,mesaj return edilir
+            //////return new SuccessResult(Messages.ProductAdded);
         }
 
         public IDataResult<List<Product>> GetAll()
