@@ -41,11 +41,8 @@ namespace WebAPI.Controllers
             var result = _productService.GetById(id);
             if (result.Success)
             {
-                //ok-->200 başarılı
-                //işlem başarılıysa datayı döndür yada sadece resultu döndür
                 return Ok(result);
             }
-            //badrequest hata 
             return BadRequest(result);
         }
 
@@ -56,11 +53,8 @@ namespace WebAPI.Controllers
             var result = _productService.Add(product);
             if (result.Success)
             {
-                //ok-->200 başarılı
-                //işlem başarılıysa datayı döndür yada sadece resultu döndür
                 return Ok(result);
             }
-            //badrequest hata 
             return BadRequest(result);
 
         }

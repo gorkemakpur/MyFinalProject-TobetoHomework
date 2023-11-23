@@ -1,6 +1,8 @@
-
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.Concrete;
+using Business.DependencyResolvers.Autofac;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 
@@ -12,17 +14,26 @@ namespace WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            //içinde data tutulmuyorsa singleton kullanýlýr
-            //bu ioc yapýsý yerine autofac, ninject, castlewindsor, structuremap, lightinject ,dryinject kullanýlabilirs
-            builder.Services.AddSingleton<IProductService,ProductManager>();
-            builder.Services.AddSingleton<IProductDal,EfProductDal>();
+            //aop -> autofac, ninject, castlewindsor, structuremap, lightinject ,dryinject kullanýlabiliriz 
+            //aop best->postsharp
+
+
+            ////not:içinde data tutulmuyorsa singleton kullanýlýr
+            //builder.Services.AddSingleton<IProductService,ProductManager>();
+            //builder.Services.AddSingleton<IProductDal,EfProductDal>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
+
+            //autofac konfigürasyonu
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,6 +47,7 @@ namespace WebAPI
 
             app.UseAuthorization();
 
+            
 
             app.MapControllers();
 
