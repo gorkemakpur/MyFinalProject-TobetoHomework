@@ -18,7 +18,7 @@ namespace ConsoleUI
 
         private static void ProductAddedTest()
         {
-            ProductManager productManager = new ProductManager(new EfProductDal());
+            /* ProductManager productManager = new ProductManager(new EfProductDal(),new CategoryManager(new EfCategoryDal()));
             Product product = new Product
             {
                 CategoryId = 1,
@@ -90,17 +90,15 @@ namespace ConsoleUI
         private static void ProductTest()
         {
             ProductManager pm = new ProductManager(new EfProductDal());
-            /*
-             foreach (var item in pm.GetAllByCategoryId(2))
-             {
-                 Console.WriteLine(item.ProductName);
-             }
-            */
+             //foreach (var item in pm.GetAllByCategoryId(2))
+             //{
+             //    Console.WriteLine(item.ProductName);
+             //}
             foreach (var item in pm.GetByUnitPrice(10, 20).Data)
             {
                 Console.WriteLine(item.ProductName);
                 Console.WriteLine(item.CategoryId);
-            }
+            }*/
         }
     }
 }

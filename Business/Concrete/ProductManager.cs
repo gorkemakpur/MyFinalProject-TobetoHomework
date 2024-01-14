@@ -24,29 +24,31 @@ namespace Business.Concrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
+        //bir manager içerisinde başka bir DAL entegre edemeyiz
 
-        public ProductManager(IProductDal productDal)
+        ICategoryService _categoryService;
+
+        public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
+            _categoryService = categoryService;
         }
 
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            BusinessRules.Run(
+            IResult result=  BusinessRules.Run(
                 CheckIfProductCountOfCategoryCorrect(product.CategoryId), 
-                CheckIfProductNameExists(product.ProductName)
+                CheckIfProductNameExists(product.ProductName),
+                CheckCategoryLimitExceded()
             );
             
-            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            if (result!=null)
             {
-                if (CheckIfProductNameExists(product.ProductName).Success)
-                {
-                    _productDal.Add(product);
-                    return new SuccessResult(Messages.ProductAdded);
-                }
+                return result;
             }
-            return new ErrorResult();
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
 
         }
 
@@ -128,6 +130,15 @@ namespace Business.Concrete
             }
             return new SuccessResult();
 
+        }
+        private IResult CheckCategoryLimitExceded()
+        {
+            var result = _categoryService.GetAll();
+            if (result.Data.Count > 15)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
+            return new SuccessResult();
         }
     }
 }
