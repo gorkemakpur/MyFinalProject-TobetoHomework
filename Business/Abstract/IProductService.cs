@@ -20,6 +20,7 @@ namespace Business.Abstract
 
         //burada ekleme işlemi yapıldığı için bir data döndürmez bu sebeple result türü yeterli olur
         IResult Add(Product product);
+        IResult Update(Product product);
     }
 
 }
